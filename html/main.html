@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1, maximum-scale=1, user-scalable=no"/>
+    <title>CBD(中原业绩)</title>
+    <link rel="stylesheet" href="../css/nav.css">
+    <link rel="stylesheet" href="../css/bootstrap.min.css">
+    <script src="../js/jquery.min.js"></script>
+    <script src="../js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="../css/bootstrap-select.css">
+    <script src="../js/bootstrap-select.js"></script>
+
+
+    <style>
+        body{
+            font-family:Microsoft Yahei;
+            -webkit-font-smoothing: antialiased;
+        }
+        nav ul li a{
+            font-size: 1.6rem;
+        }
+
+        .bg-purple{
+            background-color: #8F2DE2;
+            color: white;
+        }
+
+        #mon_pie_text p{
+            color: #A0A0A0;
+            font-size: 1.4rem;
+            line-height: 2rem;
+        }
+
+        .box {
+            height: 4rem;
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .line {
+            height: 1px;
+            flex-grow: 1;
+            background-color: #4B00E1;
+        }
+
+        .line_text{
+            margin:  0 1rem;
+            font-size: 1.5rem;
+        }
+
+
+        /*主页面标签设置不能点击*/
+        .disabled{
+            pointer-events:none;
+        }
+
+
+    </style>
+
+
+
+</head>
+<body style="height: 100%">
+<div  class="container " style="text-align: center;margin-top: 0.5rem">
+    <nav>
+        <ul>
+            <li date-li="0"><a href="#" style="text-decoration:none;" date="1">按天</a></li>
+            <li date-li="1" class="active"><a href="#"  style="text-decoration:none;" date="2">按月</a></li>
+            <li date-li="2" ><a   href="#"  style="text-decoration:none;">按季度</a></li>
+            <li date-li="3" ><a   href="#"  style="text-decoration:none;">按年度</a></li>
+        </ul>
+    </nav>
+</div>
+<div id="div1" class="container "  style="margin-top: 1.2rem;height: 100%"></div>
+
+<script src="../js/common.js"></script>
+<script src="../js/echarts/echarts.min.js"></script>
+<script src="../js/nav.js"></script>
+<script src="../js/topbar.js"></script>
+<!-- month -->
+<script src="../js/tap/month.js"></script>
+<script src="../js/echarts/month-pie.js"></script>
+<script src="../js/echarts/month-line.js"></script>
+<!-- day-->
+<script src="../js/tap/days.js"></script>
+<script src="../js/echarts/day-pie.js"></script>
+
+
+<script>
+    var d = new Date();
+    var month = (d.getMonth()+1)<10? "0"+(d.getMonth()+1) : (d.getMonth()+1);
+    var year = d.getFullYear();
+    var day = d.getDate();
+    day = day<10? "0"+day : day;
+    var firstMData = year +"-"+ month +"-01";
+    var firstday = year + "-"+month+"-"+day;
+
+    /*----------------------------------------------*/
+
+
+    var dayData = "";
+    var monthData = "";
+    var loading = "";
+    var noData = "";
+
+    $.get("noData.html",function(data,status){
+        noData = data;
+    })
+
+    $.get("loading.html",function(data,status){
+        loading = data;
+        $("#div1").html(loading);
+    })
+    $.get("month.html",function(data,status){
+        monthData = data;
+    })
+    $.get("day.html",function(data,status){
+        dayData = data;
+    })
+
+        anMonth.load(firstMData,0);
+
+
+
+
+
+
+    //tap 切换
+    $('nav').find('ul li ').click(function(){
+        var num =(this.getAttribute("date-li"));
+        if(num ==0){
+            $("#div1").empty();
+            $("#div1").html(loading);
+            anDays.load(firstday,0);
+        }else if(num ==1){
+            $("#div1").empty();
+            $("#div1").html(loading);
+            anMonth.load(firstMData,0);
+
+        }else if(num ==2){
+            $("#div1").empty();
+            $("#div1").html(noData);
+        }else if(num ==3){
+            $("#div1").empty();
+            $("#div1").html(noData);
+        }
+    })
+</script>
+
+
+
+</body>
+</html>
